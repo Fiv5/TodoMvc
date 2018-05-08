@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as ACTIONS from './actions'
-import Header from './components/header'
-import Section from './containers/section'
-import Footer from './containers/footer'
+import Header from './containers/Header'
+import Section from './containers/Section'
+import Footer from './containers/Footer'
 
 class App extends Component {
   componentDidMount() {

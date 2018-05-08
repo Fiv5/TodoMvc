@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Section from '../components/section'
+import Section from '../components/Section'
 import * as ACTIONS from '../actions'
 
 const initialState = {

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as ACTIONS from '../actions'
 
-const header = ({ handleEnterUp }) => {
+const Header = ({ handleEnterUp }) => {
   let value, input
   return (
     <header className="header">
@@ -26,22 +26,4 @@ const header = ({ handleEnterUp }) => {
   )
 }
 
-const mapDispatch2Props = (dispatch, ownProps) => ({
-  handleEnterUp(e) {
-    debugger
-    // when 'enter' do it
-    if (e.keyCode === 13 && e.target.value !== '') {
-      const title = e.target.value.trim()
-      dispatch(
-        ACTIONS.addTodo({
-          id: Date.now(),
-          title,
-          completed: false,
-        })
-      )
-      e.target.value = ''
-    }
-  },
-})
-
-export default connect(null, mapDispatch2Props)(header)
+export default Header

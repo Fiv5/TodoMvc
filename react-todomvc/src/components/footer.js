@@ -2,7 +2,7 @@ import React from 'react'
 import QueueAnim from 'rc-queue-anim'
 import * as ACTIONS from '../actions'
 
-const footer = ({
+const Footer = ({
   handleFilterClick,
   nowIndex,
   todos,
@@ -59,4 +59,4 @@ const footer = ({
   )
 }
 
-export default footer
+export default Footer

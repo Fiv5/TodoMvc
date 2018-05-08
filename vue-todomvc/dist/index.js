@@ -60,11 +60,19 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.5.6' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -254,7 +262,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports) {
 
 var g;
@@ -281,7 +289,51 @@ module.exports = g;
 
 
 /***/ }),
-/* 2 */
+/* 3 */
+/***/ (function(module, exports) {
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(6)(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = function (exec) {
+  try {
+    return !!exec();
+  } catch (e) {
+    return true;
+  }
+};
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8207,10 +8259,10 @@ Vue$3.nextTick(function () {
 
 /* harmony default export */ __webpack_exports__["a"] = (Vue$3);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0), __webpack_require__(1), __webpack_require__(7).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(2), __webpack_require__(18).setImmediate))
 
 /***/ }),
-/* 3 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -8319,11 +8371,11 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 4 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_main__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_main__ = __webpack_require__(21);
 //
 //
 //
@@ -8340,10 +8392,14 @@ module.exports = function normalizeComponent (
 });
 
 /***/ }),
-/* 5 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(16);
+
 //
 //
 //
@@ -8386,11 +8442,13 @@ module.exports = function normalizeComponent (
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   name: 'todo-main',
-  data() {
+  data: function data() {
     return {
-      todos: this.$store.state.todos,
+      // todos: this.$store.state.todos,
       newTodo: '',
       checked: false,
       filters: ['All', 'Active', 'Completed'],
@@ -8398,34 +8456,40 @@ module.exports = function normalizeComponent (
       editedTodo: null
     };
   },
-  computed: {
-    completedTodos() {
-      return this.todos.filter(todo => todo.completed);
-    },
-    activeTodo() {
-      return this.todos.filter(todo => !todo.completed);
-    },
-    remaining() {
-      return this.activeTodo.length;
-    },
+
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapState */])({
+    todos: function todos(state) {
+      return state.todos;
+    }
+  }), Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['completedTodos', 'activeTodo', 'remaining']), {
+    // completedTodos() {
+    //   return this.todos.filter(todo => todo.completed)
+    // },
+    // activeTodo() {
+    //   return this.todos.filter(todo => !todo.completed)
+    // },
+    // remaining() {
+    //   return this.activeTodo.length
+    // },
     allDone: {
-      get() {
+      get: function get() {
         return this.remaining === 0;
       },
-      set(value) {
+      set: function set(value) {
         this.$store.commit('allDone', {
           completed: value
         });
       }
     }
-  },
-  mounted() {
+  }),
+  mounted: function mounted() {
     window.addEventListener('popstate', this.popStateListener);
     window.history.replaceState({ hash: window.location.hash }, null, '#/All');
   },
+
   methods: {
-    addTodo() {
-      const value = this.newTodo && this.newTodo.trim();
+    addTodo: function addTodo() {
+      var value = this.newTodo && this.newTodo.trim();
       if (!value) return;
       // console.log(this.todos.length + 1)
       this.$store.commit('addTodo', {
@@ -8436,45 +8500,49 @@ module.exports = function normalizeComponent (
       });
       this.newTodo = '';
     },
-    delTodo(todo) {
-      const { id } = todo;
+    delTodo: function delTodo(todo) {
+      var id = todo.id;
+
       this.$store.commit('delTodo', {
-        id
+        id: id
       });
     },
-    editTodo(todo) {
+    editTodo: function editTodo(todo) {
       this.editedTodo = todo;
       this.cacheEdit = todo.title;
     },
-    cancelEdit(todo) {
+    cancelEdit: function cancelEdit(todo) {
       todo.title = this.cacheEdit;
       this.editedTodo = null;
     },
-    editDone(todo) {
-      todo.title.trim() ? void 666 : this.delTodo(todo);
+    editDone: function editDone(todo) {
+      todo.title.trim() ? null : this.delTodo(todo);
       this.editedTodo = null;
     },
-    clearCompleted() {
+    clearCompleted: function clearCompleted() {
       this.$store.commit('clearCompleted');
       // console.log(this.$store.state.todos[0])
     },
-    toggleFilter(idx) {
+    toggleFilter: function toggleFilter(idx) {
       this.nowIndex = idx;
     },
-    changeHashState(idx) {
+    changeHashState: function changeHashState(idx) {
       // 改变url的hash
-      const state = this.filters[idx],
-            hash = `#/${state}`;
-      window.history.pushState({ hash }, null, hash);
+      var state = this.filters[idx],
+          hash = '#/' + state;
+      window.history.pushState({ hash: hash }, null, hash);
     },
-    handleFilterClick(idx) {
+    handleFilterClick: function handleFilterClick(idx) {
       this.toggleFilter(idx);
       this.changeHashState(idx);
     },
-    popStateListener(e) {
+    popStateListener: function popStateListener(e) {
       if (e.state) {
-        const { hash } = e.state;
-        const filterIdx = this.filters.findIndex(filter => filter === hash.slice(hash.indexOf('/') + 1));
+        var hash = e.state.hash;
+
+        var filterIdx = this.filters.findIndex(function (filter) {
+          return filter === hash.slice(hash.indexOf('/') + 1);
+        });
         this.toggleFilter(filterIdx);
       }
     }
@@ -8482,13 +8550,13 @@ module.exports = function normalizeComponent (
   watch: {
     todos: {
       deep: true,
-      handler(todos, oldTodos) {
-        this.$store.commit('save', { todos });
+      handler: function handler(todos, oldTodos) {
+        this.$store.commit('save');
       }
     }
   },
   directives: {
-    'edit-focus'(el, binding) {
+    'edit-focus': function editFocus(el, binding) {
       if (binding.value) {
         el.focus();
       }
@@ -8497,786 +8565,72 @@ module.exports = function normalizeComponent (
 });
 
 /***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__index_css__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__index_css__);
-
-
-
-
-
-new __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */]({
-  store: __WEBPACK_IMPORTED_MODULE_2__store__["a" /* default */],
-  render(h) {
-    return h(__WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */]);
-  }
-}).$mount('#app');
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(8);
-// On some exotic environments, it's not clear which object `setimmeidate` was
-// able to install onto.  Search each possibility in the same order as the
-// `setimmediate` library.
-exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
-                       (typeof global !== "undefined" && global.setImmediate) ||
-                       (this && this.setImmediate);
-exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
-                         (typeof global !== "undefined" && global.clearImmediate) ||
-                         (this && this.clearImmediate);
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(4);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_04c2046b_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(12);
-var disposed = false
-var normalizeComponent = __webpack_require__(3)
-/* script */
-
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_04c2046b_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src\\App.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-04c2046b", Component.options)
-  } else {
-    hotAPI.reload("data-v-04c2046b", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_main_vue__ = __webpack_require__(5);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_cd9409ae_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_main_vue__ = __webpack_require__(11);
-var disposed = false
-var normalizeComponent = __webpack_require__(3)
-/* script */
-
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_main_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_cd9409ae_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_main_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src\\components\\main.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-cd9409ae", Component.options)
-  } else {
-    hotAPI.reload("data-v-cd9409ae", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
 /* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("section", { staticClass: "todoapp" }, [
-      _c("header", { staticClass: "header" }, [
-        _c("h1", [_vm._v("todos")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.newTodo,
-              expression: "newTodo"
-            }
-          ],
-          staticClass: "new-todo",
-          attrs: {
-            type: "text",
-            placeholder: "What needs to be done?",
-            autofocus: ""
-          },
-          domProps: { value: _vm.newTodo },
-          on: {
-            keyup: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "enter", 13, $event.key)
-              ) {
-                return null
-              }
-              _vm.addTodo($event)
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.newTodo = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _vm.todos.length
-        ? _c("section", { staticClass: "main" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.allDone,
-                  expression: "allDone"
-                }
-              ],
-              staticClass: "toggle-all",
-              attrs: { type: "checkbox", id: "toggle-all" },
-              domProps: {
-                checked: Array.isArray(_vm.allDone)
-                  ? _vm._i(_vm.allDone, null) > -1
-                  : _vm.allDone
-              },
-              on: {
-                change: function($event) {
-                  var $$a = _vm.allDone,
-                    $$el = $event.target,
-                    $$c = $$el.checked ? true : false
-                  if (Array.isArray($$a)) {
-                    var $$v = null,
-                      $$i = _vm._i($$a, $$v)
-                    if ($$el.checked) {
-                      $$i < 0 && (_vm.allDone = $$a.concat([$$v]))
-                    } else {
-                      $$i > -1 &&
-                        (_vm.allDone = $$a
-                          .slice(0, $$i)
-                          .concat($$a.slice($$i + 1)))
-                    }
-                  } else {
-                    _vm.allDone = $$c
-                  }
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "toggle-all" } }, [
-              _vm._v("Mark all as complete")
-            ]),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "todo-list", class: _vm.filters[_vm.nowIndex] },
-              _vm._l(_vm.todos, function(todo) {
-                return _c(
-                  "li",
-                  {
-                    key: todo.id,
-                    staticClass: "todo",
-                    class: {
-                      completed: todo.completed,
-                      editing: todo === _vm.editedTodo
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "view" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: todo.completed,
-                            expression: "todo.completed"
-                          }
-                        ],
-                        staticClass: "toggle",
-                        attrs: { type: "checkbox" },
-                        domProps: {
-                          checked: Array.isArray(todo.completed)
-                            ? _vm._i(todo.completed, null) > -1
-                            : todo.completed
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = todo.completed,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = null,
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 && (todo.completed = $$a.concat([$$v]))
-                              } else {
-                                $$i > -1 &&
-                                  (todo.completed = $$a
-                                    .slice(0, $$i)
-                                    .concat($$a.slice($$i + 1)))
-                              }
-                            } else {
-                              _vm.$set(todo, "completed", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "label",
-                        {
-                          on: {
-                            dblclick: function($event) {
-                              _vm.editTodo(todo)
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(todo.title))]
-                      ),
-                      _vm._v(" "),
-                      _c("button", {
-                        staticClass: "destroy",
-                        on: {
-                          click: function($event) {
-                            _vm.delTodo(todo)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "edit-focus",
-                          rawName: "v-edit-focus",
-                          value: todo === _vm.editedTodo,
-                          expression: "todo === editedTodo"
-                        },
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: todo.title,
-                          expression: "todo.title"
-                        }
-                      ],
-                      staticClass: "edit",
-                      attrs: { type: "text" },
-                      domProps: { value: todo.title },
-                      on: {
-                        blur: function($event) {
-                          _vm.editDone(todo)
-                        },
-                        keyup: [
-                          function($event) {
-                            if (
-                              !("button" in $event) &&
-                              _vm._k($event.keyCode, "enter", 13, $event.key)
-                            ) {
-                              return null
-                            }
-                            _vm.editDone(todo)
-                          },
-                          function($event) {
-                            if (
-                              !("button" in $event) &&
-                              _vm._k($event.keyCode, "esc", 27, $event.key)
-                            ) {
-                              return null
-                            }
-                            _vm.cancelEdit(todo)
-                          }
-                        ],
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(todo, "title", $event.target.value)
-                        }
-                      }
-                    })
-                  ]
-                )
-              })
-            )
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.todos.length
-        ? _c("footer", { staticClass: "footer" }, [
-            _c("span", { staticClass: "todo-count" }, [
-              _c("strong", [_vm._v(_vm._s(_vm.activeTodo.length) + " ")]),
-              _vm._v(
-                " " +
-                  _vm._s(_vm.activeTodo.length === 1 ? "item" : "items") +
-                  " left\n            "
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "filters" },
-              _vm._l(_vm.filters, function(filter, index) {
-                return _c(
-                  "li",
-                  {
-                    key: filter,
-                    on: {
-                      click: function($event) {
-                        _vm.handleFilterClick(index)
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "a",
-                      { class: [index === _vm.nowIndex ? "selected" : ""] },
-                      [_vm._v(_vm._s(filter))]
-                    )
-                  ]
-                )
-              })
-            ),
-            _vm._v(" "),
-            _vm.completedTodos.length !== 0
-              ? _c(
-                  "button",
-                  {
-                    staticClass: "clear-completed",
-                    on: { click: _vm.clearCompleted }
-                  },
-                  [_vm._v("\n                Clear Completed\n            ")]
-                )
-              : _vm._e()
-          ])
-        : _vm._e()
-    ]),
-    _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("footer", { staticClass: "info" }, [
-      _c("p", [_vm._v("Double-click to edit a todo")]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v("Written by "),
-        _c("a", { attrs: { href: "#" } }, [_vm._v("吴哲卿")])
-      ]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v("Part of "),
-        _c("a", { attrs: { href: "http://todomvc.com" } }, [_vm._v("TodoMVC")])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-cd9409ae", esExports)
-  }
-}
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function (it, key) {
+  return hasOwnProperty.call(it, key);
+};
+
 
 /***/ }),
 /* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "app" } }, [_c("todo-main")], 1)
-}
-var staticRenderFns = []
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-04c2046b", esExports)
-  }
-}
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(13);
+var defined = __webpack_require__(14);
+module.exports = function (it) {
+  return IObject(defined(it));
+};
+
 
 /***/ }),
 /* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(2);
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = __webpack_require__(39);
+// eslint-disable-next-line no-prototype-builtins
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
 
-
-__WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */]);
-
-const STORAGE_KEY = 'todomvc';
-// const localStore = window.localStorage
-// localStorage.getItem('todomvc') ? '' : localStorage.setItem('todomvc')
-
-/* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
-  state: {
-    todos: JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  },
-  mutations: {
-    addTodo(state, payload) {
-      state.todos.push(payload);
-      this.commit('save', {
-        todos: state.todos
-      });
-    },
-    delTodo(state, { index }) {
-      state.todos.splice(index, 1);
-      this.commit('save', {
-        todos: state.todos
-      });
-    },
-    clearCompleted(state) {
-      state.todos = state.todos.filter(todo => !todo.completed);
-      this.commit('save', {
-        todos: state.todos
-      });
-    },
-    allDone(state, { completed }) {
-      state.todos.forEach(todo => todo.completed = completed);
-      this.commit('save', {
-        todos: state.todos
-      });
-    },
-    save(state, { todos }) {
-      localStorage.setItem('todomvc', JSON.stringify(todos));
-    }
-  }
-}));
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports) {
+
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+// 7.1.4 ToInteger
+var ceil = Math.ceil;
+var floor = Math.floor;
+module.exports = function (it) {
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export Store */
 /* unused harmony export install */
-/* unused harmony export mapState */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return mapState; });
 /* unused harmony export mapMutations */
-/* unused harmony export mapGetters */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mapGetters; });
 /* unused harmony export mapActions */
 /* unused harmony export createNamespacedHelpers */
 /**
@@ -10211,19 +9565,1321 @@ var index_esm = {
 
 /* harmony default export */ __webpack_exports__["a"] = (index_esm);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 15 */
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__index_css__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__index_css__);
+
+
+
+
+
+new __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */]({
+  store: __WEBPACK_IMPORTED_MODULE_2__store__["a" /* default */],
+  render: function render(h) {
+    return h(__WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */]);
+  }
+}).$mount('#app');
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(19);
+// On some exotic environments, it's not clear which object `setimmeidate` was
+// able to install onto.  Search each possibility in the same order as the
+// `setimmediate` library.
+exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
+                       (typeof global !== "undefined" && global.setImmediate) ||
+                       (this && this.setImmediate);
+exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
+                         (typeof global !== "undefined" && global.clearImmediate) ||
+                         (this && this.clearImmediate);
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+    "use strict";
+
+    if (global.setImmediate) {
+        return;
+    }
+
+    var nextHandle = 1; // Spec says greater than zero
+    var tasksByHandle = {};
+    var currentlyRunningATask = false;
+    var doc = global.document;
+    var registerImmediate;
+
+    function setImmediate(callback) {
+      // Callback can either be a function or a string
+      if (typeof callback !== "function") {
+        callback = new Function("" + callback);
+      }
+      // Copy function arguments
+      var args = new Array(arguments.length - 1);
+      for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i + 1];
+      }
+      // Store and register the task
+      var task = { callback: callback, args: args };
+      tasksByHandle[nextHandle] = task;
+      registerImmediate(nextHandle);
+      return nextHandle++;
+    }
+
+    function clearImmediate(handle) {
+        delete tasksByHandle[handle];
+    }
+
+    function run(task) {
+        var callback = task.callback;
+        var args = task.args;
+        switch (args.length) {
+        case 0:
+            callback();
+            break;
+        case 1:
+            callback(args[0]);
+            break;
+        case 2:
+            callback(args[0], args[1]);
+            break;
+        case 3:
+            callback(args[0], args[1], args[2]);
+            break;
+        default:
+            callback.apply(undefined, args);
+            break;
+        }
+    }
+
+    function runIfPresent(handle) {
+        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+        // So if we're currently running a task, we'll need to delay this invocation.
+        if (currentlyRunningATask) {
+            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+            // "too much recursion" error.
+            setTimeout(runIfPresent, 0, handle);
+        } else {
+            var task = tasksByHandle[handle];
+            if (task) {
+                currentlyRunningATask = true;
+                try {
+                    run(task);
+                } finally {
+                    clearImmediate(handle);
+                    currentlyRunningATask = false;
+                }
+            }
+        }
+    }
+
+    function installNextTickImplementation() {
+        registerImmediate = function(handle) {
+            process.nextTick(function () { runIfPresent(handle); });
+        };
+    }
+
+    function canUsePostMessage() {
+        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+        // where `global.postMessage` means something completely different and can't be used for this purpose.
+        if (global.postMessage && !global.importScripts) {
+            var postMessageIsAsynchronous = true;
+            var oldOnMessage = global.onmessage;
+            global.onmessage = function() {
+                postMessageIsAsynchronous = false;
+            };
+            global.postMessage("", "*");
+            global.onmessage = oldOnMessage;
+            return postMessageIsAsynchronous;
+        }
+    }
+
+    function installPostMessageImplementation() {
+        // Installs an event handler on `global` for the `message` event: see
+        // * https://developer.mozilla.org/en/DOM/window.postMessage
+        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+
+        var messagePrefix = "setImmediate$" + Math.random() + "$";
+        var onGlobalMessage = function(event) {
+            if (event.source === global &&
+                typeof event.data === "string" &&
+                event.data.indexOf(messagePrefix) === 0) {
+                runIfPresent(+event.data.slice(messagePrefix.length));
+            }
+        };
+
+        if (global.addEventListener) {
+            global.addEventListener("message", onGlobalMessage, false);
+        } else {
+            global.attachEvent("onmessage", onGlobalMessage);
+        }
+
+        registerImmediate = function(handle) {
+            global.postMessage(messagePrefix + handle, "*");
+        };
+    }
+
+    function installMessageChannelImplementation() {
+        var channel = new MessageChannel();
+        channel.port1.onmessage = function(event) {
+            var handle = event.data;
+            runIfPresent(handle);
+        };
+
+        registerImmediate = function(handle) {
+            channel.port2.postMessage(handle);
+        };
+    }
+
+    function installReadyStateChangeImplementation() {
+        var html = doc.documentElement;
+        registerImmediate = function(handle) {
+            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+            var script = doc.createElement("script");
+            script.onreadystatechange = function () {
+                runIfPresent(handle);
+                script.onreadystatechange = null;
+                html.removeChild(script);
+                script = null;
+            };
+            html.appendChild(script);
+        };
+    }
+
+    function installSetTimeoutImplementation() {
+        registerImmediate = function(handle) {
+            setTimeout(runIfPresent, 0, handle);
+        };
+    }
+
+    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+    // Don't get fooled by e.g. browserify environments.
+    if ({}.toString.call(global.process) === "[object process]") {
+        // For Node.js before 0.9
+        installNextTickImplementation();
+
+    } else if (canUsePostMessage()) {
+        // For non-IE10 modern browsers
+        installPostMessageImplementation();
+
+    } else if (global.MessageChannel) {
+        // For web workers, where supported
+        installMessageChannelImplementation();
+
+    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+        // For IE 6–8
+        installReadyStateChangeImplementation();
+
+    } else {
+        // For older browsers
+        installSetTimeoutImplementation();
+    }
+
+    attachTo.setImmediate = setImmediate;
+    attachTo.clearImmediate = clearImmediate;
+}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(9);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7ba5bd90_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(52);
+var disposed = false
+var normalizeComponent = __webpack_require__(8)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7ba5bd90_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/App.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7ba5bd90", Component.options)
+  } else {
+    hotAPI.reload("data-v-7ba5bd90", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_main_vue__ = __webpack_require__(10);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c886d6e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_main_vue__ = __webpack_require__(51);
+var disposed = false
+var normalizeComponent = __webpack_require__(8)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_main_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c886d6e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_main_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/components/main.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5c886d6e", Component.options)
+  } else {
+    hotAPI.reload("data-v-5c886d6e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _assign = __webpack_require__(23);
+
+var _assign2 = _interopRequireDefault(_assign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _assign2.default || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(24), __esModule: true };
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(25);
+module.exports = __webpack_require__(0).Object.assign;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.1 Object.assign(target, source)
+var $export = __webpack_require__(26);
+
+$export($export.S + $export.F, 'Object', { assign: __webpack_require__(36) });
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(3);
+var core = __webpack_require__(0);
+var ctx = __webpack_require__(27);
+var hide = __webpack_require__(29);
+var has = __webpack_require__(11);
+var PROTOTYPE = 'prototype';
+
+var $export = function (type, name, source) {
+  var IS_FORCED = type & $export.F;
+  var IS_GLOBAL = type & $export.G;
+  var IS_STATIC = type & $export.S;
+  var IS_PROTO = type & $export.P;
+  var IS_BIND = type & $export.B;
+  var IS_WRAP = type & $export.W;
+  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+  var expProto = exports[PROTOTYPE];
+  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
+  var key, own, out;
+  if (IS_GLOBAL) source = name;
+  for (key in source) {
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if (own && has(exports, key)) continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function (C) {
+      var F = function (a, b, c) {
+        if (this instanceof C) {
+          switch (arguments.length) {
+            case 0: return new C();
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if (IS_PROTO) {
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library`
+module.exports = $export;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// optional / simple context binding
+var aFunction = __webpack_require__(28);
+module.exports = function (fn, that, length) {
+  aFunction(fn);
+  if (that === undefined) return fn;
+  switch (length) {
+    case 1: return function (a) {
+      return fn.call(that, a);
+    };
+    case 2: return function (a, b) {
+      return fn.call(that, a, b);
+    };
+    case 3: return function (a, b, c) {
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function (/* ...args */) {
+    return fn.apply(that, arguments);
+  };
+};
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(30);
+var createDesc = __webpack_require__(35);
+module.exports = __webpack_require__(5) ? function (object, key, value) {
+  return dP.f(object, key, createDesc(1, value));
+} : function (object, key, value) {
+  object[key] = value;
+  return object;
+};
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var anObject = __webpack_require__(31);
+var IE8_DOM_DEFINE = __webpack_require__(32);
+var toPrimitive = __webpack_require__(34);
+var dP = Object.defineProperty;
+
+exports.f = __webpack_require__(5) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if (IE8_DOM_DEFINE) try {
+    return dP(O, P, Attributes);
+  } catch (e) { /* empty */ }
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+  if ('value' in Attributes) O[P] = Attributes.value;
+  return O;
+};
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(4);
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = !__webpack_require__(5) && !__webpack_require__(6)(function () {
+  return Object.defineProperty(__webpack_require__(33)('div'), 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(4);
+var document = __webpack_require__(3).document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function (it) {
+  return is ? document.createElement(it) : {};
+};
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = __webpack_require__(4);
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function (it, S) {
+  if (!isObject(it)) return it;
+  var fn, val;
+  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+module.exports = function (bitmap, value) {
+  return {
+    enumerable: !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable: !(bitmap & 4),
+    value: value
+  };
+};
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys = __webpack_require__(37);
+var gOPS = __webpack_require__(48);
+var pIE = __webpack_require__(49);
+var toObject = __webpack_require__(50);
+var IObject = __webpack_require__(13);
+var $assign = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || __webpack_require__(6)(function () {
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line no-undef
+  var S = Symbol();
+  var K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function (k) { B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+  var T = toObject(target);
+  var aLen = arguments.length;
+  var index = 1;
+  var getSymbols = gOPS.f;
+  var isEnum = pIE.f;
+  while (aLen > index) {
+    var S = IObject(arguments[index++]);
+    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+  } return T;
+} : $assign;
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys = __webpack_require__(38);
+var enumBugKeys = __webpack_require__(47);
+
+module.exports = Object.keys || function keys(O) {
+  return $keys(O, enumBugKeys);
+};
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var has = __webpack_require__(11);
+var toIObject = __webpack_require__(12);
+var arrayIndexOf = __webpack_require__(40)(false);
+var IE_PROTO = __webpack_require__(43)('IE_PROTO');
+
+module.exports = function (object, names) {
+  var O = toIObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while (names.length > i) if (has(O, key = names[i++])) {
+    ~arrayIndexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = function (it) {
+  return toString.call(it).slice(8, -1);
+};
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = __webpack_require__(12);
+var toLength = __webpack_require__(41);
+var toAbsoluteIndex = __webpack_require__(42);
+module.exports = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIObject($this);
+    var length = toLength(O.length);
+    var index = toAbsoluteIndex(fromIndex, length);
+    var value;
+    // Array#includes uses SameValueZero equality algorithm
+    // eslint-disable-next-line no-self-compare
+    if (IS_INCLUDES && el != el) while (length > index) {
+      value = O[index++];
+      // eslint-disable-next-line no-self-compare
+      if (value != value) return true;
+    // Array#indexOf ignores holes, Array#includes - not
+    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+      if (O[index] === el) return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.15 ToLength
+var toInteger = __webpack_require__(15);
+var min = Math.min;
+module.exports = function (it) {
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(15);
+var max = Math.max;
+var min = Math.min;
+module.exports = function (index, length) {
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var shared = __webpack_require__(44)('keys');
+var uid = __webpack_require__(46);
+module.exports = function (key) {
+  return shared[key] || (shared[key] = uid(key));
+};
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var core = __webpack_require__(0);
+var global = __webpack_require__(3);
+var SHARED = '__core-js_shared__';
+var store = global[SHARED] || (global[SHARED] = {});
+
+(module.exports = function (key, value) {
+  return store[key] || (store[key] = value !== undefined ? value : {});
+})('versions', []).push({
+  version: core.version,
+  mode: __webpack_require__(45) ? 'pure' : 'global',
+  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+});
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+module.exports = true;
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+var id = 0;
+var px = Math.random();
+module.exports = function (key) {
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
+exports.f = Object.getOwnPropertySymbols;
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+exports.f = {}.propertyIsEnumerable;
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.13 ToObject(argument)
+var defined = __webpack_require__(14);
+module.exports = function (it) {
+  return Object(defined(it));
+};
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("section", { staticClass: "todoapp" }, [
+      _c("header", { staticClass: "header" }, [
+        _c("h1", [_vm._v("todos")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.newTodo,
+              expression: "newTodo"
+            }
+          ],
+          staticClass: "new-todo",
+          attrs: {
+            type: "text",
+            placeholder: "What needs to be done?",
+            autofocus: ""
+          },
+          domProps: { value: _vm.newTodo },
+          on: {
+            keyup: function($event) {
+              if (
+                !("button" in $event) &&
+                _vm._k($event.keyCode, "enter", 13, $event.key)
+              ) {
+                return null
+              }
+              _vm.addTodo($event)
+            },
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.newTodo = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _vm.todos.length
+        ? _c("section", { staticClass: "main" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.allDone,
+                  expression: "allDone"
+                }
+              ],
+              staticClass: "toggle-all",
+              attrs: { type: "checkbox", id: "toggle-all" },
+              domProps: {
+                checked: Array.isArray(_vm.allDone)
+                  ? _vm._i(_vm.allDone, null) > -1
+                  : _vm.allDone
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.allDone,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && (_vm.allDone = $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        (_vm.allDone = $$a
+                          .slice(0, $$i)
+                          .concat($$a.slice($$i + 1)))
+                    }
+                  } else {
+                    _vm.allDone = $$c
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("label", { attrs: { for: "toggle-all" } }, [
+              _vm._v("Mark all as complete")
+            ]),
+            _vm._v(" "),
+            _c(
+              "ul",
+              { staticClass: "todo-list", class: _vm.filters[_vm.nowIndex] },
+              _vm._l(_vm.todos, function(todo) {
+                return _c(
+                  "li",
+                  {
+                    key: todo.id,
+                    staticClass: "todo",
+                    class: {
+                      completed: todo.completed,
+                      editing: todo === _vm.editedTodo
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "view" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: todo.completed,
+                            expression: "todo.completed"
+                          }
+                        ],
+                        staticClass: "toggle",
+                        attrs: { type: "checkbox" },
+                        domProps: {
+                          checked: Array.isArray(todo.completed)
+                            ? _vm._i(todo.completed, null) > -1
+                            : todo.completed
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = todo.completed,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 && (todo.completed = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (todo.completed = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.$set(todo, "completed", $$c)
+                            }
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          on: {
+                            dblclick: function($event) {
+                              _vm.editTodo(todo)
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(todo.title))]
+                      ),
+                      _vm._v(" "),
+                      _c("button", {
+                        staticClass: "destroy",
+                        on: {
+                          click: function($event) {
+                            _vm.delTodo(todo)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "edit-focus",
+                          rawName: "v-edit-focus",
+                          value: todo === _vm.editedTodo,
+                          expression: "todo === editedTodo"
+                        },
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: todo.title,
+                          expression: "todo.title"
+                        }
+                      ],
+                      staticClass: "edit",
+                      attrs: { type: "text" },
+                      domProps: { value: todo.title },
+                      on: {
+                        blur: function($event) {
+                          _vm.editDone(todo)
+                        },
+                        keyup: [
+                          function($event) {
+                            if (
+                              !("button" in $event) &&
+                              _vm._k($event.keyCode, "enter", 13, $event.key)
+                            ) {
+                              return null
+                            }
+                            _vm.editDone(todo)
+                          },
+                          function($event) {
+                            if (
+                              !("button" in $event) &&
+                              _vm._k($event.keyCode, "esc", 27, $event.key)
+                            ) {
+                              return null
+                            }
+                            _vm.cancelEdit(todo)
+                          }
+                        ],
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(todo, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ]
+                )
+              })
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.todos.length
+        ? _c("footer", { staticClass: "footer" }, [
+            _c("span", { staticClass: "todo-count" }, [
+              _c("strong", [_vm._v(_vm._s(_vm.activeTodo.length) + " ")]),
+              _vm._v(
+                " " +
+                  _vm._s(_vm.activeTodo.length === 1 ? "item" : "items") +
+                  " left\n            "
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "ul",
+              { staticClass: "filters" },
+              _vm._l(_vm.filters, function(filter, index) {
+                return _c(
+                  "li",
+                  {
+                    key: filter,
+                    on: {
+                      click: function($event) {
+                        _vm.handleFilterClick(index)
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "a",
+                      { class: [index === _vm.nowIndex ? "selected" : ""] },
+                      [_vm._v(_vm._s(filter))]
+                    )
+                  ]
+                )
+              })
+            ),
+            _vm._v(" "),
+            _vm.completedTodos.length !== 0
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "clear-completed",
+                    on: { click: _vm.clearCompleted }
+                  },
+                  [_vm._v("\n                Clear Completed\n            ")]
+                )
+              : _vm._e()
+          ])
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("footer", { staticClass: "info" }, [
+      _c("p", [_vm._v("Double-click to edit a todo")]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v("Written by "),
+        _c("a", { attrs: { href: "#" } }, [_vm._v("吴哲卿")])
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v("Part of "),
+        _c("a", { attrs: { href: "http://todomvc.com" } }, [_vm._v("TodoMVC")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5c886d6e", esExports)
+  }
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "app" } }, [_c("todo-main")], 1)
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7ba5bd90", esExports)
+  }
+}
+
+/***/ }),
+/* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue__ = __webpack_require__(7);
+
+
+
+__WEBPACK_IMPORTED_MODULE_2_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
+
+var STORAGE_KEY = 'todomvc';
+// const localStore = window.localStorage
+// localStorage.getItem('todomvc') ? '' : localStorage.setItem('todomvc')
+var saveItem = function saveItem(store) {
+  store.subscribe(function (mutations, _ref) {
+    var todos = _ref.todos;
+
+    localStorage.setItem('todomvc', __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify___default()(todos));
+  });
+};
+/* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
+  state: {
+    todos: JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+  },
+  getters: {
+    completedTodos: function completedTodos(_ref2) {
+      var todos = _ref2.todos;
+
+      return todos.filter(function (todo) {
+        return todo.completed;
+      });
+    },
+    activeTodo: function activeTodo(_ref3) {
+      var todos = _ref3.todos;
+
+      return todos.filter(function (todo) {
+        return !todo.completed;
+      });
+    },
+    remaining: function remaining(_, _ref4) {
+      var activeTodo = _ref4.activeTodo;
+
+      return activeTodo.length;
+    }
+  },
+  mutations: {
+    addTodo: function addTodo(state, payload) {
+      state.todos.push(payload);
+    },
+    delTodo: function delTodo(state, _ref5) {
+      var id = _ref5.id;
+
+      state.todos = state.todos.filter(function (todo) {
+        return todo.id !== id;
+      });
+      // state.todos.splice(index, 1)
+    },
+    clearCompleted: function clearCompleted(state) {
+      state.todos = state.todos.filter(function (todo) {
+        return !todo.completed;
+      });
+    },
+    allDone: function allDone(state, _ref6) {
+      var completed = _ref6.completed;
+
+      state.todos.forEach(function (todo) {
+        return todo.completed = completed;
+      });
+    },
+
+    // save item in localstorage
+    save: function save(state, payload) {
+      // localStorage.setItem('todomvc', JSON.stringify(todos))
+    }
+  },
+  plugins: [saveItem]
+}));
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(55), __esModule: true };
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var core = __webpack_require__(0);
+var $JSON = core.JSON || (core.JSON = { stringify: JSON.stringify });
+module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(16);
+var content = __webpack_require__(57);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(18)(content, {});
+var update = __webpack_require__(59)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -10240,21 +10896,21 @@ if(false) {
 }
 
 /***/ }),
-/* 16 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(17)(false);
+exports = module.exports = __webpack_require__(58)(false);
 // imports
 
 
 // module
-exports.push([module.i, "hr {\r\n  margin: 20px 0;\r\n  border: 0;\r\n  border-top: 1px dashed #c5c5c5;\r\n  border-bottom: 1px dashed #f7f7f7;\r\n}\r\n\r\n.learn a {\r\n  font-weight: normal;\r\n  text-decoration: none;\r\n  color: #b83f45;\r\n}\r\n\r\n.learn a:hover {\r\n  text-decoration: underline;\r\n  color: #787e7e;\r\n}\r\n\r\n.learn h3,\r\n.learn h4,\r\n.learn h5 {\r\n  margin: 10px 0;\r\n  font-weight: 500;\r\n  line-height: 1.2;\r\n  color: #000;\r\n}\r\n\r\n.learn h3 {\r\n  font-size: 24px;\r\n}\r\n\r\n.learn h4 {\r\n  font-size: 18px;\r\n}\r\n\r\n.learn h5 {\r\n  margin-bottom: 0;\r\n  font-size: 14px;\r\n}\r\n\r\n.learn ul {\r\n  padding: 0;\r\n  margin: 0 0 30px 25px;\r\n}\r\n\r\n.learn li {\r\n  line-height: 20px;\r\n}\r\n\r\n.learn p {\r\n  font-size: 15px;\r\n  font-weight: 300;\r\n  line-height: 1.3;\r\n  margin-top: 0;\r\n  margin-bottom: 0;\r\n}\r\n\r\n#issue-count {\r\n  display: none;\r\n}\r\n\r\n.quote {\r\n  border: none;\r\n  margin: 20px 0 60px 0;\r\n}\r\n\r\n.quote p {\r\n  font-style: italic;\r\n}\r\n\r\n.quote p:before {\r\n  content: '\\201C';\r\n  font-size: 50px;\r\n  opacity: 0.15;\r\n  position: absolute;\r\n  top: -20px;\r\n  left: 3px;\r\n}\r\n\r\n.quote p:after {\r\n  content: '\\201D';\r\n  font-size: 50px;\r\n  opacity: 0.15;\r\n  position: absolute;\r\n  bottom: -42px;\r\n  right: 3px;\r\n}\r\n\r\n.quote footer {\r\n  position: absolute;\r\n  bottom: -40px;\r\n  right: 0;\r\n}\r\n\r\n.quote footer img {\r\n  border-radius: 3px;\r\n}\r\n\r\n.quote footer a {\r\n  margin-left: 5px;\r\n  vertical-align: middle;\r\n}\r\n\r\n.speech-bubble {\r\n  position: relative;\r\n  padding: 10px;\r\n  background: rgba(0, 0, 0, 0.04);\r\n  border-radius: 5px;\r\n}\r\n\r\n.speech-bubble:after {\r\n  content: '';\r\n  position: absolute;\r\n  top: 100%;\r\n  right: 30px;\r\n  border: 13px solid transparent;\r\n  border-top-color: rgba(0, 0, 0, 0.04);\r\n}\r\n\r\n.learn-bar > .learn {\r\n  position: absolute;\r\n  width: 272px;\r\n  top: 8px;\r\n  left: -300px;\r\n  padding: 10px;\r\n  border-radius: 5px;\r\n  background-color: rgba(255, 255, 255, 0.6);\r\n  transition-property: left;\r\n  transition-duration: 500ms;\r\n}\r\n\r\n@media (min-width: 899px) {\r\n  .learn-bar {\r\n    width: auto;\r\n    padding-left: 300px;\r\n  }\r\n\r\n  .learn-bar > .learn {\r\n    left: 8px;\r\n  }\r\n}\r\n\r\nhtml,\r\nbody {\r\n  margin: 0;\r\n  padding: 0;\r\n}\r\n\r\nbutton {\r\n  margin: 0;\r\n  padding: 0;\r\n  border: 0;\r\n  background: none;\r\n  font-size: 100%;\r\n  vertical-align: baseline;\r\n  font-family: inherit;\r\n  font-weight: inherit;\r\n  color: inherit;\r\n  -webkit-appearance: none;\r\n  appearance: none;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\nbody {\r\n  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n  line-height: 1.4em;\r\n  background: #f5f5f5;\r\n  color: #4d4d4d;\r\n  min-width: 230px;\r\n  max-width: 550px;\r\n  margin: 0 auto;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  font-weight: 300;\r\n}\r\n\r\n:focus {\r\n  outline: 0;\r\n}\r\n\r\n.hidden {\r\n  display: none;\r\n}\r\n\r\n.todoapp {\r\n  background: #fff;\r\n  margin: 130px 0 40px 0;\r\n  position: relative;\r\n  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.todoapp input::-webkit-input-placeholder {\r\n  font-style: italic;\r\n  font-weight: 300;\r\n  color: #e6e6e6;\r\n}\r\n\r\n.todoapp input::-moz-placeholder {\r\n  font-style: italic;\r\n  font-weight: 300;\r\n  color: #e6e6e6;\r\n}\r\n\r\n.todoapp input::input-placeholder {\r\n  font-style: italic;\r\n  font-weight: 300;\r\n  color: #e6e6e6;\r\n}\r\n\r\n.todoapp h1 {\r\n  position: absolute;\r\n  top: -155px;\r\n  width: 100%;\r\n  font-size: 100px;\r\n  font-weight: 100;\r\n  text-align: center;\r\n  color: rgba(175, 47, 47, 0.15);\r\n  -webkit-text-rendering: optimizeLegibility;\r\n  -moz-text-rendering: optimizeLegibility;\r\n  text-rendering: optimizeLegibility;\r\n}\r\n\r\n.new-todo,\r\n.edit {\r\n  position: relative;\r\n  margin: 0;\r\n  width: 100%;\r\n  font-size: 24px;\r\n  font-family: inherit;\r\n  font-weight: inherit;\r\n  line-height: 1.4em;\r\n  border: 0;\r\n  color: inherit;\r\n  padding: 6px;\r\n  border: 1px solid #999;\r\n  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);\r\n  box-sizing: border-box;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.new-todo {\r\n  padding: 16px 16px 16px 60px;\r\n  border: none;\r\n  background: rgba(0, 0, 0, 0.003);\r\n  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);\r\n}\r\n\r\n.main {\r\n  position: relative;\r\n  z-index: 2;\r\n  border-top: 1px solid #e6e6e6;\r\n}\r\n\r\n.toggle-all {\r\n  text-align: center;\r\n  border: none; /* Mobile Safari */\r\n  opacity: 0;\r\n  position: absolute;\r\n}\r\n\r\n.toggle-all + label {\r\n  width: 60px;\r\n  height: 34px;\r\n  font-size: 0;\r\n  position: absolute;\r\n  top: -52px;\r\n  left: -13px;\r\n  -webkit-transform: rotate(90deg);\r\n  transform: rotate(90deg);\r\n}\r\n\r\n.toggle-all + label:before {\r\n  content: '\\276F';\r\n  font-size: 22px;\r\n  color: #e6e6e6;\r\n  padding: 10px 27px 10px 27px;\r\n}\r\n\r\n.toggle-all:checked + label:before {\r\n  color: #737373;\r\n}\r\n\r\n.todo-list {\r\n  margin: 0;\r\n  padding: 0;\r\n  list-style: none;\r\n}\r\n\r\n.todo-list.Active .completed, .todo-list.Completed li:not(.completed) {\r\n  display: none;\r\n}\r\n\r\n.todo-list li {\r\n  position: relative;\r\n  font-size: 24px;\r\n  border-bottom: 1px solid #ededed;\r\n}\r\n\r\n.todo-list li:last-child {\r\n  border-bottom: none;\r\n}\r\n\r\n.todo-list li.editing {\r\n  border-bottom: none;\r\n  padding: 0;\r\n}\r\n\r\n.todo-list li.editing .edit {\r\n  display: block;\r\n  width: 506px;\r\n  padding: 12px 16px;\r\n  margin: 0 0 0 43px;\r\n}\r\n\r\n.todo-list li.editing .view {\r\n  display: none;\r\n}\r\n\r\n.todo-list li .toggle {\r\n  text-align: center;\r\n  width: 40px;\r\n  /* auto, since non-WebKit browsers doesn't support input styling */\r\n  height: auto;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  margin: auto 0;\r\n  border: none; /* Mobile Safari */\r\n  -webkit-appearance: none;\r\n  appearance: none;\r\n}\r\n\r\n.todo-list li .toggle {\r\n  opacity: 0;\r\n}\r\n\r\n.todo-list li .toggle + label {\r\n  /*\r\n\t\tFirefox requires `#` to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433\r\n\t\tIE and Edge requires *everything* to be escaped to render, so we do that instead of just the `#` - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/\r\n\t*/\r\n  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');\r\n  background-repeat: no-repeat;\r\n  background-position: center left;\r\n}\r\n\r\n.todo-list li .toggle:checked + label {\r\n  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');\r\n}\r\n\r\n.todo-list li label {\r\n  word-break: break-all;\r\n  padding: 15px 15px 15px 60px;\r\n  display: block;\r\n  line-height: 1.2;\r\n  transition: color 0.4s;\r\n}\r\n\r\n.todo-list li.completed label {\r\n  color: #d9d9d9;\r\n  text-decoration: line-through;\r\n}\r\n\r\n.todo-list li .destroy {\r\n  display: none;\r\n  position: absolute;\r\n  top: 0;\r\n  right: 10px;\r\n  bottom: 0;\r\n  width: 40px;\r\n  height: 40px;\r\n  margin: auto 0;\r\n  font-size: 30px;\r\n  color: #cc9a9a;\r\n  margin-bottom: 11px;\r\n  transition: color 0.2s ease-out;\r\n}\r\n\r\n.todo-list li .destroy:hover {\r\n  color: #af5b5e;\r\n}\r\n\r\n.todo-list li .destroy:after {\r\n  content: '\\D7';\r\n}\r\n\r\n.todo-list li:hover .destroy {\r\n  display: block;\r\n}\r\n\r\n.todo-list li .edit {\r\n  display: none;\r\n}\r\n\r\n.todo-list li.editing:last-child {\r\n  margin-bottom: -1px;\r\n}\r\n\r\n.footer {\r\n  color: #777;\r\n  padding: 10px 15px;\r\n  height: 20px;\r\n  text-align: center;\r\n  border-top: 1px solid #e6e6e6;\r\n}\r\n\r\n.footer:before {\r\n  content: '';\r\n  position: absolute;\r\n  right: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  height: 50px;\r\n  overflow: hidden;\r\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,\r\n    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,\r\n    0 17px 2px -6px rgba(0, 0, 0, 0.2);\r\n}\r\n\r\n.todo-count {\r\n  float: left;\r\n  text-align: left;\r\n}\r\n\r\n.todo-count strong {\r\n  font-weight: 300;\r\n}\r\n\r\n.filters {\r\n  margin: 0;\r\n  padding: 0;\r\n  list-style: none;\r\n  position: absolute;\r\n  right: 0;\r\n  left: 0;\r\n}\r\n\r\n.filters li {\r\n  display: inline;\r\n}\r\n\r\n.filters li a {\r\n  color: inherit;\r\n  margin: 3px;\r\n  padding: 3px 7px;\r\n  text-decoration: none;\r\n  border: 1px solid transparent;\r\n  border-radius: 3px;\r\n  cursor: pointer;\r\n}\r\n\r\n.filters li a:hover {\r\n  border-color: rgba(175, 47, 47, 0.1);\r\n}\r\n\r\n.filters li a.selected {\r\n  border-color: rgba(175, 47, 47, 0.2);\r\n}\r\n\r\n.clear-completed,\r\nhtml .clear-completed:active {\r\n  float: right;\r\n  position: relative;\r\n  line-height: 20px;\r\n  text-decoration: none;\r\n  cursor: pointer;\r\n}\r\n\r\n.clear-completed:hover {\r\n  text-decoration: underline;\r\n}\r\n\r\n.info {\r\n  margin: 65px auto 0;\r\n  color: #bfbfbf;\r\n  font-size: 10px;\r\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\r\n  text-align: center;\r\n}\r\n\r\n.info p {\r\n  line-height: 1;\r\n}\r\n\r\n.info a {\r\n  color: inherit;\r\n  text-decoration: none;\r\n  font-weight: 400;\r\n}\r\n\r\n.info a:hover {\r\n  text-decoration: underline;\r\n}\r\n\r\n/*\r\n\tHack to remove background from Mobile Safari.\r\n\tCan't use it globally since it destroys checkboxes in Firefox\r\n*/\r\n@media screen and (-webkit-min-device-pixel-ratio: 0) {\r\n  .toggle-all,\r\n  .todo-list li .toggle {\r\n    background: none;\r\n  }\r\n\r\n  .todo-list li .toggle {\r\n    height: 40px;\r\n  }\r\n}\r\n\r\n@media (max-width: 430px) {\r\n  .footer {\r\n    height: 50px;\r\n  }\r\n\r\n  .filters {\r\n    bottom: 10px;\r\n  }\r\n}\r\n", ""]);
+exports.push([module.i, "/* copy by todomvc.css */\r\nhr {\r\n  margin: 20px 0;\r\n  border: 0;\r\n  border-top: 1px dashed #c5c5c5;\r\n  border-bottom: 1px dashed #f7f7f7;\r\n}\r\n\r\n.learn a {\r\n  font-weight: normal;\r\n  text-decoration: none;\r\n  color: #b83f45;\r\n}\r\n\r\n.learn a:hover {\r\n  text-decoration: underline;\r\n  color: #787e7e;\r\n}\r\n\r\n.learn h3,\r\n.learn h4,\r\n.learn h5 {\r\n  margin: 10px 0;\r\n  font-weight: 500;\r\n  line-height: 1.2;\r\n  color: #000;\r\n}\r\n\r\n.learn h3 {\r\n  font-size: 24px;\r\n}\r\n\r\n.learn h4 {\r\n  font-size: 18px;\r\n}\r\n\r\n.learn h5 {\r\n  margin-bottom: 0;\r\n  font-size: 14px;\r\n}\r\n\r\n.learn ul {\r\n  padding: 0;\r\n  margin: 0 0 30px 25px;\r\n}\r\n\r\n.learn li {\r\n  line-height: 20px;\r\n}\r\n\r\n.learn p {\r\n  font-size: 15px;\r\n  font-weight: 300;\r\n  line-height: 1.3;\r\n  margin-top: 0;\r\n  margin-bottom: 0;\r\n}\r\n\r\n#issue-count {\r\n  display: none;\r\n}\r\n\r\n.quote {\r\n  border: none;\r\n  margin: 20px 0 60px 0;\r\n}\r\n\r\n.quote p {\r\n  font-style: italic;\r\n}\r\n\r\n.quote p:before {\r\n  content: '\\201C';\r\n  font-size: 50px;\r\n  opacity: 0.15;\r\n  position: absolute;\r\n  top: -20px;\r\n  left: 3px;\r\n}\r\n\r\n.quote p:after {\r\n  content: '\\201D';\r\n  font-size: 50px;\r\n  opacity: 0.15;\r\n  position: absolute;\r\n  bottom: -42px;\r\n  right: 3px;\r\n}\r\n\r\n.quote footer {\r\n  position: absolute;\r\n  bottom: -40px;\r\n  right: 0;\r\n}\r\n\r\n.quote footer img {\r\n  border-radius: 3px;\r\n}\r\n\r\n.quote footer a {\r\n  margin-left: 5px;\r\n  vertical-align: middle;\r\n}\r\n\r\n.speech-bubble {\r\n  position: relative;\r\n  padding: 10px;\r\n  background: rgba(0, 0, 0, 0.04);\r\n  border-radius: 5px;\r\n}\r\n\r\n.speech-bubble:after {\r\n  content: '';\r\n  position: absolute;\r\n  top: 100%;\r\n  right: 30px;\r\n  border: 13px solid transparent;\r\n  border-top-color: rgba(0, 0, 0, 0.04);\r\n}\r\n\r\n.learn-bar > .learn {\r\n  position: absolute;\r\n  width: 272px;\r\n  top: 8px;\r\n  left: -300px;\r\n  padding: 10px;\r\n  border-radius: 5px;\r\n  background-color: rgba(255, 255, 255, 0.6);\r\n  transition-property: left;\r\n  transition-duration: 500ms;\r\n}\r\n\r\n@media (min-width: 899px) {\r\n  .learn-bar {\r\n    width: auto;\r\n    padding-left: 300px;\r\n  }\r\n\r\n  .learn-bar > .learn {\r\n    left: 8px;\r\n  }\r\n}\r\n\r\nhtml,\r\nbody {\r\n  margin: 0;\r\n  padding: 0;\r\n}\r\n\r\nbutton {\r\n  margin: 0;\r\n  padding: 0;\r\n  border: 0;\r\n  background: none;\r\n  font-size: 100%;\r\n  vertical-align: baseline;\r\n  font-family: inherit;\r\n  font-weight: inherit;\r\n  color: inherit;\r\n  -webkit-appearance: none;\r\n  appearance: none;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\nbody {\r\n  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n  line-height: 1.4em;\r\n  background: #f5f5f5;\r\n  color: #4d4d4d;\r\n  min-width: 230px;\r\n  max-width: 550px;\r\n  margin: 0 auto;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  font-weight: 300;\r\n}\r\n\r\n:focus {\r\n  outline: 0;\r\n}\r\n\r\n.hidden {\r\n  display: none;\r\n}\r\n\r\n.todoapp {\r\n  background: #fff;\r\n  margin: 130px 0 40px 0;\r\n  position: relative;\r\n  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.todoapp input::-webkit-input-placeholder {\r\n  font-style: italic;\r\n  font-weight: 300;\r\n  color: #e6e6e6;\r\n}\r\n\r\n.todoapp input::-moz-placeholder {\r\n  font-style: italic;\r\n  font-weight: 300;\r\n  color: #e6e6e6;\r\n}\r\n\r\n.todoapp input::input-placeholder {\r\n  font-style: italic;\r\n  font-weight: 300;\r\n  color: #e6e6e6;\r\n}\r\n\r\n.todoapp h1 {\r\n  position: absolute;\r\n  top: -155px;\r\n  width: 100%;\r\n  font-size: 100px;\r\n  font-weight: 100;\r\n  text-align: center;\r\n  color: rgba(175, 47, 47, 0.15);\r\n  -webkit-text-rendering: optimizeLegibility;\r\n  -moz-text-rendering: optimizeLegibility;\r\n  text-rendering: optimizeLegibility;\r\n}\r\n\r\n.new-todo,\r\n.edit {\r\n  position: relative;\r\n  margin: 0;\r\n  width: 100%;\r\n  font-size: 24px;\r\n  font-family: inherit;\r\n  font-weight: inherit;\r\n  line-height: 1.4em;\r\n  border: 0;\r\n  color: inherit;\r\n  padding: 6px;\r\n  border: 1px solid #999;\r\n  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);\r\n  box-sizing: border-box;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.new-todo {\r\n  padding: 16px 16px 16px 60px;\r\n  border: none;\r\n  background: rgba(0, 0, 0, 0.003);\r\n  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);\r\n}\r\n\r\n.main {\r\n  position: relative;\r\n  z-index: 2;\r\n  border-top: 1px solid #e6e6e6;\r\n}\r\n\r\n.toggle-all {\r\n  text-align: center;\r\n  border: none; /* Mobile Safari */\r\n  opacity: 0;\r\n  position: absolute;\r\n}\r\n\r\n.toggle-all + label {\r\n  width: 60px;\r\n  height: 34px;\r\n  font-size: 0;\r\n  position: absolute;\r\n  top: -52px;\r\n  left: -13px;\r\n  -webkit-transform: rotate(90deg);\r\n  transform: rotate(90deg);\r\n}\r\n\r\n.toggle-all + label:before {\r\n  content: '\\276F';\r\n  font-size: 22px;\r\n  color: #e6e6e6;\r\n  padding: 10px 27px 10px 27px;\r\n}\r\n\r\n.toggle-all:checked + label:before {\r\n  color: #737373;\r\n}\r\n\r\n.todo-list {\r\n  margin: 0;\r\n  padding: 0;\r\n  list-style: none;\r\n}\r\n\r\n.todo-list.Active .completed, .todo-list.Completed li:not(.completed) {\r\n  display: none;\r\n}\r\n\r\n.todo-list li {\r\n  position: relative;\r\n  font-size: 24px;\r\n  border-bottom: 1px solid #ededed;\r\n}\r\n\r\n.todo-list li:last-child {\r\n  border-bottom: none;\r\n}\r\n\r\n.todo-list li.editing {\r\n  border-bottom: none;\r\n  padding: 0;\r\n}\r\n\r\n.todo-list li.editing .edit {\r\n  display: block;\r\n  width: 506px;\r\n  padding: 12px 16px;\r\n  margin: 0 0 0 43px;\r\n}\r\n\r\n.todo-list li.editing .view {\r\n  display: none;\r\n}\r\n\r\n.todo-list li .toggle {\r\n  text-align: center;\r\n  width: 40px;\r\n  /* auto, since non-WebKit browsers doesn't support input styling */\r\n  height: auto;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  margin: auto 0;\r\n  border: none; /* Mobile Safari */\r\n  -webkit-appearance: none;\r\n  appearance: none;\r\n}\r\n\r\n.todo-list li .toggle {\r\n  opacity: 0;\r\n}\r\n\r\n.todo-list li .toggle + label {\r\n  /*\r\n\t\tFirefox requires `#` to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433\r\n\t\tIE and Edge requires *everything* to be escaped to render, so we do that instead of just the `#` - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/\r\n\t*/\r\n  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');\r\n  background-repeat: no-repeat;\r\n  background-position: center left;\r\n}\r\n\r\n.todo-list li .toggle:checked + label {\r\n  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');\r\n}\r\n\r\n.todo-list li label {\r\n  word-break: break-all;\r\n  padding: 15px 15px 15px 60px;\r\n  display: block;\r\n  line-height: 1.2;\r\n  transition: color 0.4s;\r\n}\r\n\r\n.todo-list li.completed label {\r\n  color: #d9d9d9;\r\n  text-decoration: line-through;\r\n}\r\n\r\n.todo-list li .destroy {\r\n  display: none;\r\n  position: absolute;\r\n  top: 0;\r\n  right: 10px;\r\n  bottom: 0;\r\n  width: 40px;\r\n  height: 40px;\r\n  margin: auto 0;\r\n  font-size: 30px;\r\n  color: #cc9a9a;\r\n  margin-bottom: 11px;\r\n  transition: color 0.2s ease-out;\r\n}\r\n\r\n.todo-list li .destroy:hover {\r\n  color: #af5b5e;\r\n}\r\n\r\n.todo-list li .destroy:after {\r\n  content: '\\D7';\r\n}\r\n\r\n.todo-list li:hover .destroy {\r\n  display: block;\r\n}\r\n\r\n.todo-list li .edit {\r\n  display: none;\r\n}\r\n\r\n.todo-list li.editing:last-child {\r\n  margin-bottom: -1px;\r\n}\r\n\r\n.footer {\r\n  color: #777;\r\n  padding: 10px 15px;\r\n  height: 20px;\r\n  text-align: center;\r\n  border-top: 1px solid #e6e6e6;\r\n}\r\n\r\n.footer:before {\r\n  content: '';\r\n  position: absolute;\r\n  right: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  height: 50px;\r\n  overflow: hidden;\r\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,\r\n    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,\r\n    0 17px 2px -6px rgba(0, 0, 0, 0.2);\r\n}\r\n\r\n.todo-count {\r\n  float: left;\r\n  text-align: left;\r\n}\r\n\r\n.todo-count strong {\r\n  font-weight: 300;\r\n}\r\n\r\n.filters {\r\n  margin: 0;\r\n  padding: 0;\r\n  list-style: none;\r\n  position: absolute;\r\n  right: 0;\r\n  left: 0;\r\n}\r\n\r\n.filters li {\r\n  display: inline;\r\n}\r\n\r\n.filters li a {\r\n  color: inherit;\r\n  margin: 3px;\r\n  padding: 3px 7px;\r\n  text-decoration: none;\r\n  border: 1px solid transparent;\r\n  border-radius: 3px;\r\n  cursor: pointer;\r\n}\r\n\r\n.filters li a:hover {\r\n  border-color: rgba(175, 47, 47, 0.1);\r\n}\r\n\r\n.filters li a.selected {\r\n  border-color: rgba(175, 47, 47, 0.2);\r\n}\r\n\r\n.clear-completed,\r\nhtml .clear-completed:active {\r\n  float: right;\r\n  position: relative;\r\n  line-height: 20px;\r\n  text-decoration: none;\r\n  cursor: pointer;\r\n}\r\n\r\n.clear-completed:hover {\r\n  text-decoration: underline;\r\n}\r\n\r\n.info {\r\n  margin: 65px auto 0;\r\n  color: #bfbfbf;\r\n  font-size: 10px;\r\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\r\n  text-align: center;\r\n}\r\n\r\n.info p {\r\n  line-height: 1;\r\n}\r\n\r\n.info a {\r\n  color: inherit;\r\n  text-decoration: none;\r\n  font-weight: 400;\r\n}\r\n\r\n.info a:hover {\r\n  text-decoration: underline;\r\n}\r\n\r\n/*\r\n\tHack to remove background from Mobile Safari.\r\n\tCan't use it globally since it destroys checkboxes in Firefox\r\n*/\r\n@media screen and (-webkit-min-device-pixel-ratio: 0) {\r\n  .toggle-all,\r\n  .todo-list li .toggle {\r\n    background: none;\r\n  }\r\n\r\n  .todo-list li .toggle {\r\n    height: 40px;\r\n  }\r\n}\r\n\r\n@media (max-width: 430px) {\r\n  .footer {\r\n    height: 50px;\r\n  }\r\n\r\n  .filters {\r\n    bottom: 10px;\r\n  }\r\n}\r\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 17 */
+/* 58 */
 /***/ (function(module, exports) {
 
 /*
@@ -10336,7 +10992,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 18 */
+/* 59 */
 /***/ (function(module, exports) {
 
 /*

@@ -28,8 +28,9 @@ const header = ({ handleEnterUp }) => {
 
 const mapDispatch2Props = (dispatch, ownProps) => ({
   handleEnterUp(e) {
+    debugger
     // when 'enter' do it
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && e.target.value !== '') {
       const title = e.target.value.trim()
       dispatch(
         ACTIONS.addTodo({

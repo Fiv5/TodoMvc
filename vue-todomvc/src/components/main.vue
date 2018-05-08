@@ -40,11 +40,13 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   name: 'todo-main',
   data() {
     return {
-      todos: this.$store.state.todos,
+      // todos: this.$store.state.todos,
       newTodo: '',
       checked: false,
       filters: ['All', 'Active', 'Completed'],
@@ -53,15 +55,21 @@ export default {
     }
   },
   computed: {
-    completedTodos() {
-      return this.todos.filter(todo => todo.completed)
-    },
-    activeTodo() {
-      return this.todos.filter(todo => !todo.completed)
-    },
-    remaining() {
-      return this.activeTodo.length
-    },
+    // todos 应作为一个state的计算属性获取， 如果直接放在data中， 当在store中进行对state的赋值操作
+    // 如：state.todos = xxx  则会导致不是同一个对象引用而致使数据失去响应式
+    ...mapState({
+      todos: state => state.todos,
+    }),
+    ...mapGetters(['completedTodos', 'activeTodo', 'remaining']),
+    // completedTodos() {
+    //   return this.todos.filter(todo => todo.completed)
+    // },
+    // activeTodo() {
+    //   return this.todos.filter(todo => !todo.completed)
+    // },
+    // remaining() {
+    //   return this.activeTodo.length
+    // },
     allDone: {
       get() {
         return this.remaining === 0
@@ -105,7 +113,7 @@ export default {
       this.editedTodo = null
     },
     editDone(todo) {
-      todo.title.trim() ? void 666 : this.delTodo(todo)
+      todo.title.trim() ? null : this.delTodo(todo)
       this.editedTodo = null
     },
     clearCompleted() {
@@ -139,7 +147,7 @@ export default {
     todos: {
       deep: true,
       handler(todos, oldTodos) {
-        this.$store.commit('save', { todos })
+        this.$store.commit('save')
       },
     },
   },

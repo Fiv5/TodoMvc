@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 let path = require('path')
 
 module.exports = {
@@ -12,7 +13,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.json'],
   },
-  devtool: 'cheap-source-map',
+  devtool: 'eval-source-map',
   module: {
     rules: [
       {
@@ -35,8 +36,21 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
     }),
-    // new webpack.HotModuleReplacementPlugin()  new webpack.DefinePlugin({
-    // 'process.env.NODE.ENV':'development' }), new
-    // webpack.HotModuleReplacementPlugin()
   ],
+}
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = 'source-map'
+
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false,
+      },
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+    }),
+  ])
 }

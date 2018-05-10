@@ -11,7 +11,7 @@ const mapState2Props = ({ todos, visibilityFilter }) => ({
 const mapDispatch2Props = dispatch => ({
   // 点击时将状态呈现在url上
   handleFilterClick(index, type) {
-    const hash = `#/${type[0].concat(type.toLowerCase().slice(1))}`
+    const hash = `#/${type.charAt(0) + type.toLowerCase().substring(1)}`
     const action = ACTIONS.toggleFilter({ index, filter: type })
     dispatch(action)
     window.history.pushState({ hash, action }, null, hash)

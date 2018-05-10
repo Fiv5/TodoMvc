@@ -24,8 +24,9 @@ const mapDispatch2Props = dispatch => ({
       payload: { value },
     })
   },
-  toggleTodo(e, id) {
-    const value = e.target.checked
+  toggleTodo(id) {
+    // 'e' 在传参最后
+    const value = arguments[arguments.length - 1].target.checked
     dispatch({
       type: ACTIONS.TOGGLE_TODO,
       payload: {

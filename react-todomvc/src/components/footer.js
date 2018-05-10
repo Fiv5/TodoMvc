@@ -20,9 +20,7 @@ const Footer = ({
         return (
           <li
             key={filter.type}
-            onClick={() => {
-              handleFilterClick(index, filter.type)
-            }}
+            onClick={handleFilterClick.bind(null, index, filter.type)}
           >
             <a className={index === nowIndex ? 'selected' : ''}>
               {filter.title}
@@ -41,7 +39,7 @@ const Footer = ({
     >
       {todos.length ? (
         <footer className="footer" key="footer">
-            <span className="todo-count">
+          <span className="todo-count">
             <strong>{activeTodo.length} </strong>{' '}
             {activeTodo.length === 1 ? 'item' : 'items'} left
           </span>

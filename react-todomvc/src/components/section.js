@@ -8,6 +8,7 @@ export default class extends React.Component {
     this.state = {
       editedTodo: null,
     }
+    this.cancelEdit = this.cancelEdit.bind(this)
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.editedTodo) {
@@ -19,7 +20,7 @@ export default class extends React.Component {
     this.setState({
       editedTodo: todo,
     })
-    // console.log(this.editInput)
+    // cache
     this.editInput.value = todo.title
     this.cacheEdit = todo.title
   }
@@ -30,7 +31,8 @@ export default class extends React.Component {
     })
   }
 
-  handleKeyUp(e, todo) {
+  handleKeyUp(todo) {
+    const e = arguments[arguments.length - 1]
     // 'esc' => 27 , 'enter' => 13
     const { keyCode } = e
     if (keyCode === 13) {
@@ -62,33 +64,21 @@ export default class extends React.Component {
                   type="checkbox"
                   checked={todo.completed}
                   className="toggle"
-                  onChange={e => {
-                    toggleTodo(e, todo.id)
-                  }}
+                  onChange={toggleTodo.bind(null, todo.id)}
                 />
-                <label
-                  onDoubleClick={e => {
-                    this.handleDbClick(todo)
-                  }}
-                >
+                <label onDoubleClick={this.handleDbClick.bind(this, todo)}>
                   {todo.title}
                 </label>
                 <button
                   className="destroy"
-                  onClick={() => {
-                    delTodo(todo.id)
-                  }}
+                  onClick={delTodo.bind(null, todo.id)}
                 />
               </div>
               <input
                 type="text"
                 ref={node => (this.editInput = node)}
-                onKeyUp={e => {
-                  this.handleKeyUp(e, todo)
-                }}
-                onBlur={() => {
-                  this.cancelEdit(todo)
-                }}
+                onKeyUp={this.handleKeyUp.bind(this, todo)}
+                onBlur={this.cancelEdit}
                 className="edit"
               />
             </li>
@@ -99,7 +89,6 @@ export default class extends React.Component {
       <section
         key="section"
         className="main"
-        v-if="todos.length"
         // style={{ display: todos.length ? 'block' : 'none' }}
       >
         <input

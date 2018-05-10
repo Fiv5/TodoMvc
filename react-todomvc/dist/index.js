@@ -23799,9 +23799,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Header = function Header(_ref) {
   var handleEnterUp = _ref.handleEnterUp;
 
-  debugger;
-  var value = void 0,
-      input = void 0;
+  // let value, input
   return _react2.default.createElement(
     'header',
     { className: 'header' },
@@ -23812,15 +23810,7 @@ var Header = function Header(_ref) {
     ),
     _react2.default.createElement('input', {
       type: 'text',
-      ref: function ref(node) {
-        input = node;
-      },
-      onChange: function onChange() {
-        value = input.value;
-      },
-      onKeyUp: function onKeyUp(e) {
-        handleEnterUp(e);
-      },
+      onKeyUp: handleEnterUp,
       placeholder: 'What needs to be done?',
       className: 'new-todo',
       autoFocus: true
@@ -23885,8 +23875,9 @@ var mapDispatch2Props = function mapDispatch2Props(dispatch) {
         payload: { value: value }
       });
     },
-    toggleTodo: function toggleTodo(e, id) {
-      var value = e.target.checked;
+    toggleTodo: function toggleTodo(id) {
+      // 'e' 在传参最后
+      var value = arguments[arguments.length - 1].target.checked;
       dispatch({
         type: ACTIONS.TOGGLE_TODO,
         payload: {
@@ -23964,6 +23955,7 @@ var _class = function (_React$Component) {
     _this.state = {
       editedTodo: null
     };
+    _this.cancelEdit = _this.cancelEdit.bind(_this);
     return _this;
   }
 
@@ -23981,7 +23973,7 @@ var _class = function (_React$Component) {
       this.setState({
         editedTodo: todo
       });
-      // console.log(this.editInput)
+      // cache
       this.editInput.value = todo.title;
       this.cacheEdit = todo.title;
     }
@@ -23994,7 +23986,8 @@ var _class = function (_React$Component) {
     }
   }, {
     key: 'handleKeyUp',
-    value: function handleKeyUp(e, todo) {
+    value: function handleKeyUp(todo) {
+      var e = arguments[arguments.length - 1];
       // 'esc' => 27 , 'enter' => 13
       var keyCode = e.keyCode;
 
@@ -24036,24 +24029,16 @@ var _class = function (_React$Component) {
               type: 'checkbox',
               checked: todo.completed,
               className: 'toggle',
-              onChange: function onChange(e) {
-                toggleTodo(e, todo.id);
-              }
+              onChange: toggleTodo.bind(null, todo.id)
             }),
             _react2.default.createElement(
               'label',
-              {
-                onDoubleClick: function onDoubleClick(e) {
-                  _this2.handleDbClick(todo);
-                }
-              },
+              { onDoubleClick: _this2.handleDbClick.bind(_this2, todo) },
               todo.title
             ),
             _react2.default.createElement('button', {
               className: 'destroy',
-              onClick: function onClick() {
-                delTodo(todo.id);
-              }
+              onClick: delTodo.bind(null, todo.id)
             })
           ),
           _react2.default.createElement('input', {
@@ -24061,12 +24046,8 @@ var _class = function (_React$Component) {
             ref: function ref(node) {
               return _this2.editInput = node;
             },
-            onKeyUp: function onKeyUp(e) {
-              _this2.handleKeyUp(e, todo);
-            },
-            onBlur: function onBlur() {
-              _this2.cancelEdit(todo);
-            },
+            onKeyUp: _this2.handleKeyUp.bind(_this2, todo),
+            onBlur: _this2.cancelEdit,
             className: 'edit'
           })
         );
@@ -24075,8 +24056,7 @@ var _class = function (_React$Component) {
         'section',
         {
           key: 'section',
-          className: 'main',
-          'v-if': 'todos.length'
+          className: 'main'
           // style={{ display: todos.length ? 'block' : 'none' }}
         },
         _react2.default.createElement('input', {
@@ -27781,7 +27761,7 @@ var mapDispatch2Props = function mapDispatch2Props(dispatch) {
   return {
     // 点击时将状态呈现在url上
     handleFilterClick: function handleFilterClick(index, type) {
-      var hash = '#/' + type[0].concat(type.toLowerCase().slice(1));
+      var hash = '#/' + (type.charAt(0) + type.toLowerCase().substring(1));
       var action = ACTIONS.toggleFilter({ index: index, filter: type });
       dispatch(action);
       window.history.pushState({ hash: hash, action: action }, null, hash);
@@ -27836,9 +27816,7 @@ var Footer = function Footer(_ref) {
       'li',
       {
         key: filter.type,
-        onClick: function onClick() {
-          handleFilterClick(index, filter.type);
-        }
+        onClick: handleFilterClick.bind(null, index, filter.type)
       },
       _react2.default.createElement(
         'a',

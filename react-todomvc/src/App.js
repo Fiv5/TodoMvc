@@ -8,7 +8,6 @@ import Footer from './containers/Footer'
 class App extends Component {
   componentDidMount() {
     window.addEventListener('popstate', this.props.onPopState)
-    debugger
     window.history.replaceState(null, null, '#/All')
   }
 

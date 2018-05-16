@@ -7,21 +7,24 @@ export default class extends React.Component {
     super(props)
     this.state = {
       editedTodo: null,
+      editInputValue: '',
     }
     this.cancelEdit = this.cancelEdit.bind(this)
+    this.handleEditChange = this.handleEditChange.bind(this)
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.editedTodo) {
+      let currItem = this[this.state.editedTodo.id]
       // 聚焦
-      this.editInput.focus()
+      currItem.focus()
     }
   }
   handleDbClick(todo) {
     this.setState({
       editedTodo: todo,
+      editInputValue: todo.title,
     })
     // cache
-    this.editInput.value = todo.title
     this.cacheEdit = todo.title
   }
 
@@ -48,6 +51,14 @@ export default class extends React.Component {
     }
     return
   }
+
+  handleEditChange(e) {
+    let { value } = e.target
+    this.setState({
+      editInputValue: value,
+    })
+  }
+
   render() {
     const { todos, toggleAll, toggleTodo, delTodo } = this.props
     const todoItem = todos
@@ -57,8 +68,7 @@ export default class extends React.Component {
               className={`todo ${todo.completed ? 'completed' : ''} ${
                 this.state.editedTodo === todo ? 'editing' : ''
               }`}
-              key={todo.id}
-            >
+              key={todo.id}>
               <div className="view">
                 <input
                   type="checkbox"
@@ -76,7 +86,9 @@ export default class extends React.Component {
               </div>
               <input
                 type="text"
-                ref={node => (this.editInput = node)}
+                ref={node => (this[todo.id] = node)}
+                value={this.state.editInputValue}
+                onChange={this.handleEditChange}
                 onKeyUp={this.handleKeyUp.bind(this, todo)}
                 onBlur={this.cancelEdit}
                 className="edit"
@@ -102,8 +114,7 @@ export default class extends React.Component {
           className="todo-list"
           component="ul"
           type={['right', 'left']}
-          leaveReverse
-        >
+          leaveReverse>
           {todoItem}
         </QueueAnim>
       </section>
